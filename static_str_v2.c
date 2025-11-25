@@ -346,7 +346,7 @@ static void vstr_format_n(char* buf, int* len, int limit, const char* fmt, va_li
                 }
 
                 tempFloat = va_arg(args, double);
-                str_from_float(buf, len, limit, tempFloat, precision);
+                str_from_float_v2(buf, len, limit, tempFloat, precision);
             }
             else if (*cursor == 'D') {
                 put_current_date(buf, len, limit);
@@ -524,3 +524,4 @@ void str_visible(char* buf, int* len, int limit, const char* str) {
         ++str;
     }
 }
+
