@@ -1,6 +1,7 @@
 #include "static_str_v2.h"
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include <ctype.h>
 #include <wctype.h>
 
@@ -225,6 +226,58 @@ void str_from_float(char* buf, int* len, int limit, float n, int precision) {
     if (precision > 0) {
         str_concat_char(buf, len, limit, '.');
         str_from_integer(buf, len, limit, intPart2);
+    }
+}
+
+void str_from_float_v2(char* buf, int* len, int limit, float n, int precision) {
+    #define FLOAT_ZERO_LIMITATION  0.000001f
+
+    int i = 0;
+    float added;
+
+    if (n < FLOAT_ZERO_LIMITATION && n > -FLOAT_ZERO_LIMITATION) {
+        str_concat_n(buf, len, limit, "0");
+        return;
+    }
+
+    if (isinf(n)) {
+        if (n > 0) {
+            str_concat_n(buf, len, limit, "inf");
+            return;
+        }
+        else {
+            str_concat_n(buf, len, limit, "-inf");
+            return;
+        }
+    }
+
+    if (isnan(n)) {
+        str_concat_n(buf, len, limit, "nan");
+        return;
+    }
+
+    added = 0.5f;
+    for (i = 0; i < precision; ++i) {
+        added /= 10.0;
+    }
+
+    if (n < 0) {
+        n = -n;
+        str_concat_char(buf, len, limit, '-');
+    }
+
+    n += added;
+    str_from_integer(buf, len, limit, (int)n);
+
+    if (precision > 0) {
+        str_concat_char(buf, len, limit, '.');
+        n -= (int)n;
+        
+        for (i = 0; i < precision; ++i) {
+            n *= 10;
+        }
+
+        str_from_integer(buf, len, limit, (int)n);
     }
 }
 
