@@ -42,9 +42,16 @@ void str_from_integer_hex(char* buf, int* len, int limit, unsigned int i);
 void str_from_integer_oct(char* buf, int* len, int limit, unsigned int i);
 
 /*
+    deprecated, please use str_from_float_v2() instead.
     convert a float number with the given precision to a string.
 */
 void str_from_float(char* buf, int* len, int limit, float n, int precision);
+
+/*
+    convert a float number with the given precision to a string.
+    this function could deal with nan, inf.
+*/
+void str_from_float_v2(char* buf, int* len, int limit, float n, int precision);
 
 /*
     just like snprintf. not thread safe.
